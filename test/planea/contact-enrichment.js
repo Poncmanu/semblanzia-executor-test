@@ -1,0 +1,24 @@
+(function(root,factory){const api=factory();if(typeof module==='object'&&module.exports)module.exports=api;else root.PLANEAContactEnrichment=api;})(typeof window==='object'?window:globalThis,function(){
+'use strict';
+const instruction="Find provider candidates from the supplied privacy-safe service facts. For EVERY candidate, complete the Provider Contact Enrichment Protocol during this original sourcing operation: identify the provider and its official public website/source; search its available public information; inspect official/public contact surfaces, contact pages/forms, headers and footers. Look specifically for WhatsApp buttons/links and their actual public destinations (including wa.me/WhatsApp URLs), email addresses/mailto links, telephone numbers/tel links, and website/contact forms. Follow public contact buttons to resolve their actual destination without sending messages, emails, calls or forms. Record ALL verified routes, not only the first; never infer or fabricate a route or treat a generic phone as WhatsApp. For each contact_routes entry return type, value, source_url, evidence (the observed public text/link or button destination), and verified:true; omit unverified or invented routes. In contact_enrichment return official_source_url, inspected_sources (all public URLs checked), direct_contact_search_completed:true, and web_only:true only when no verified WhatsApp, email or phone was found AFTER this enrichment attempt. Rank verified routes WhatsApp > Email > Phone > Website/contact form; preserve every route and its evidence even when another route is preferred. Return one planea.provider_candidates.v1 version 1 package with the unchanged request_ref. Preserve provider name, service category/area, human-readable evidence and verification_state; never invent pricing, availability, responses or verification. Never include customer identity/contact information. Do not request a second contact-search operation from the operator; contact enrichment is part of this original sourcing request.";
+const types=['whatsapp','email','phone','website','url','contact_form','instagram','facebook','other'];
+function evidenceMatches(r){const evidence=r.evidence.toLowerCase(),value=r.value.toLowerCase();if(r.type==='whatsapp'||r.type==='phone'){const digits=value.replace(/[^0-9]/g,'');return digits.length>=7&&evidence.replace(/[^0-9]/g,'').includes(digits)&&(r.type!=='whatsapp'||/(whatsapp|wa\.me)/i.test(evidence));}return evidence.includes(value);}
+const http=value=>{try{const u=new URL(value);return ['http:','https:'].includes(u.protocol);}catch(_){return false;}};
+function validatePackage(pkg){
+ if(!pkg||pkg.contract!=='planea.provider_candidates.v1'||pkg.version!==1||!Array.isArray(pkg.candidates))throw new Error('INVALID_CANDIDATE_CONTRACT');
+ for(const c of pkg.candidates){
+  const e=c.contact_enrichment;
+  if(!e||!http(e.official_source_url)||e.direct_contact_search_completed!==true||typeof e.web_only!=='boolean'||!Array.isArray(e.inspected_sources)||!e.inspected_sources.length||!e.inspected_sources.every(http)||!e.inspected_sources.includes(e.official_source_url))throw new Error('CONTACT_ENRICHMENT_REQUIRED');
+  if(!Array.isArray(c.contact_routes))throw new Error('INVALID_CONTACT_ROUTES');
+  for(const r of c.contact_routes){
+   if(!types.includes(r.type)||typeof r.value!=='string'||!r.value.trim()||r.verified!==true||!http(r.source_url)||!e.inspected_sources.includes(r.source_url)||typeof r.evidence!=='string'||!r.evidence.trim()||r.evidence.length>2000)throw new Error('UNVERIFIED_CONTACT_ROUTE');
+   if(!evidenceMatches(r))throw new Error('UNVERIFIED_CONTACT_ROUTE');
+   if(['website','url','contact_form'].includes(r.type)&&!http(r.value))throw new Error('UNVERIFIED_CONTACT_ROUTE');
+  }
+  const direct=c.contact_routes.some(r=>['whatsapp','email','phone'].includes(r.type));
+  if(e.web_only!==(!direct&&c.contact_routes.some(r=>['website','url','contact_form'].includes(r.type))))throw new Error('CONTACT_ENRICHMENT_CLASSIFICATION_MISMATCH');
+ }
+ return pkg;
+}
+return {instruction,validatePackage};
+});

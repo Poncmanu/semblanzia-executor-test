@@ -1,7 +1,7 @@
 {
   "source_repository": "Poncmanu/semblanzia",
   "source_branch": "test/planea-m2a-provider-sourcing",
-  "source_sha": "fdea12a3862bc53fbb89e0ef97aae3b8cc51f959",
+  "source_sha": "9c7091750e57a72a85e39330e60f0249dee1e1f6",
   "test_project": "vylrliliaojtcrrhvscv",
   "files": {
     "test/executor-test-config.js": "1c466c1cb51a9240faf911de5c7e878351d22cf72ad88231948e25918b180095",
@@ -11,10 +11,11 @@
     "test/planea/planea.css": "def2e8fd6324f68c239c3286c03a86156f866c717ded08887adda15d58b3a7cd",
     "test/planea/vendor/supabase.js": "7e94b62086deecef8c0ba3b38f514e2a1944ff6c81d92fb3ff967828c406c38f",
     "test/planea/vendor/LICENSE": "334dd6820e2eaeab2064e7c59001b810566728a28a41a7c1dbf69bbee17d0936",
-    "test/planea/operations.html": "95bbf1b164c5d8c4bb7f5a1029282cc7b940df0e9ead16161a4ffc5ae075d77f",
-    "test/planea/planea.js": "09bce49c7c5b17ea0d069d475c535cae5deba6ef7121468bd2babef137896c96",
-    "test/planea/bridge-client.js": "3aba629d1e4e3ffc91923f1041bafde8e22920b99e1b1a9d7d246830b5e7950b"
+    "test/planea/operations.html": "5675a794b1480d28c951619e282a73a35c2fad16f59ea0fc5e3cacfff0edf176",
+    "test/planea/planea.js": "704af7c6e73738f7016149f54274a6b1408676ae52b791ea56c6e71b00f55b34",
+    "test/planea/bridge-client.js": "3aba629d1e4e3ffc91923f1041bafde8e22920b99e1b1a9d7d246830b5e7950b",
+    "test/planea/contact-enrichment.js": "c891e9ca2672f5cbdfee9cd4ca32906dce4c90e8c7cdaf7908bde77f09588749"
   },
   "control_center_source_sha": "1bbc76b57921eac03adfcad55ff64d35cbd4e9c0",
-  "operations_source_sha": "fdea12a3862bc53fbb89e0ef97aae3b8cc51f959"
+  "operations_source_sha": "9c7091750e57a72a85e39330e60f0249dee1e1f6"
 }
