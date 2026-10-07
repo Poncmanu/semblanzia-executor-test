@@ -1,0 +1,15 @@
+{
+  "source_repository": "Poncmanu/semblanzia",
+  "source_branch": "test/planea-executor-controller-v1",
+  "source_sha": "778bf75c84650a6cb74a0cccd4ee9d6d382877df",
+  "test_project": "vylrliliaojtcrrhvscv",
+  "files": {
+    "test/executor-test-config.js": "25110bed489e9cfe4252645f6d2220b14badfd5686084db14cced56992571017",
+    "test/planea/executor-controller-test.html": "f9d3e1440b1589b0b4bbabc2e50d844879c3a3da0b2c1f0cab93c0b7a236b264",
+    "test/planea/executor-controller-test.js": "4bec0c222cda23c2a817c7aa35e808c6068bde866fdd0e5fe5dd406d688b3850",
+    "test/planea/executor-controller-test.css": "11e70dda77dde496c981073e1af3b87ca30a570ffa276f1aa04995596a6bed2d",
+    "test/planea/planea.css": "def2e8fd6324f68c239c3286c03a86156f866c717ded08887adda15d58b3a7cd",
+    "test/planea/vendor/supabase.js": "7e94b62086deecef8c0ba3b38f514e2a1944ff6c81d92fb3ff967828c406c38f",
+    "test/planea/vendor/LICENSE": "334dd6820e2eaeab2064e7c59001b810566728a28a41a7c1dbf69bbee17d0936"
+  }
+}
