@@ -1,0 +1,86 @@
+name: Deploy TEST from Semblanzia
+
+on:
+  workflow_dispatch:
+    inputs:
+      source_ref:
+        description: "Semblanzia branch or commit to deploy to TEST"
+        required: true
+        default: "test/planea-v20-customer-proposals"
+
+permissions:
+  contents: write
+
+concurrency:
+  group: planea-test-deploy
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout TEST deployment repository
+        uses: actions/checkout@v4
+
+      - name: Download approved source files from Semblanzia
+        env:
+          SOURCE_REF: ${{ inputs.source_ref }}
+        run: |
+          set -euo pipefail
+          base="https://raw.githubusercontent.com/Poncmanu/semblanzia/${SOURCE_REF}"
+          files=(
+            test/planea/operations.html
+            test/planea/planea.js
+            test/planea/planea.css
+            test/planea/bridge-client.js
+            test/planea/contact-enrichment.js
+            test/planea/candidate-correlation.js
+          )
+          for file in "${files[@]}"; do
+            mkdir -p "$(dirname "$file")"
+            curl --fail --location --silent --show-error "$base/$file" -o "$file"
+          done
+          grep -q "https://vylrliliaojtcrrhvscv.supabase.co" test/planea/planea.js
+          if grep -R "uiqgqjynrxerqszmyxyj" test/planea test/executor-test-config.js; then
+            echo "PROD Supabase reference detected in TEST deployment"
+            exit 1
+          fi
+
+      - name: Keep TEST deployment marker visible
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          p=Path("test/planea/operations.html")
+          s=p.read_text()
+          s=s.replace("TEST · MILESTONE 2A · V19.6","TEST · V20")
+          s=s.replace("planea.js?v=19.6","planea.js?v=20")
+          p.write_text(s)
+          PY
+
+      - name: Record source revision
+        env:
+          SOURCE_REF: ${{ inputs.source_ref }}
+        run: |
+          python - <<'PY'
+          import json, os
+          from pathlib import Path
+          p=Path("deployment.json")
+          d=json.loads(p.read_text())
+          d["source_repository"]="Poncmanu/semblanzia"
+          d["source_branch"]=os.environ["SOURCE_REF"]
+          d["deployment_strategy"]="github_actions_direct_test"
+          p.write_text(json.dumps(d,indent=2)+"\n")
+          PY
+
+      - name: Commit TEST deployment
+        run: |
+          set -e
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add test/planea deployment.json
+          if git diff --cached --quiet; then
+            echo "TEST already matches requested source."
+            exit 0
+          fi
+          git commit -m "deploy: PLANEA TEST from ${{ inputs.source_ref }}"
+          git push
