@@ -22,12 +22,17 @@ jobs:
       - name: Checkout TEST deployment repository
         uses: actions/checkout@v4
 
-      - name: Download approved source files from Semblanzia
-        env:
-          SOURCE_REF: ${{ inputs.source_ref }}
+      - name: Checkout Semblanzia TEST source
+        uses: actions/checkout@v4
+        with:
+          repository: Poncmanu/semblanzia
+          ref: ${{ inputs.source_ref }}
+          path: source
+          persist-credentials: false
+
+      - name: Copy approved source files from Semblanzia
         run: |
           set -euo pipefail
-          base="https://raw.githubusercontent.com/Poncmanu/semblanzia/${SOURCE_REF}"
           files=(
             test/planea/operations.html
             test/planea/planea.js
@@ -37,8 +42,7 @@ jobs:
             test/planea/candidate-correlation.js
           )
           for file in "${files[@]}"; do
-            mkdir -p "$(dirname "$file")"
-            curl --fail --location --silent --show-error "$base/$file" -o "$file"
+            cp "source/$file" "$file"
           done
           grep -q "https://vylrliliaojtcrrhvscv.supabase.co" test/planea/planea.js
           if grep -R "uiqgqjynrxerqszmyxyj" test/planea test/executor-test-config.js; then
