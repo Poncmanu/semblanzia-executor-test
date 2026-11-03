@@ -51,8 +51,8 @@ jobs:
         run: |
           set -euo pipefail
           test "$(git -C source rev-parse HEAD)" = "$SOURCE_SHA"
-          # Checkout is SHA-pinned. Branch membership must be verified separately before dispatch.
-          # Never silently fall back to main or an arbitrary branch.
+          git -C source fetch --depth=1 origin test/current
+          test "$(git -C source rev-parse FETCH_HEAD)" = "$SOURCE_SHA" || { echo "SOURCE_NOT_CURRENT_TEST_HEAD"; exit 1; }
           grep -q 'https://vylrliliaojtcrrhvscv.supabase.co' source/test/planea/planea.js
           grep -q 'planea_operator_research_status_test' source/test/planea/planea.js
           if grep -R -l 'uiqgqjynrxerqszmyxyj' source/test/planea/*.js source/test/config.js; then
