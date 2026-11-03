@@ -65,8 +65,9 @@ jobs:
         run: |
           set -euo pipefail
           mkdir -p test/planea test/assets/brand/wordmark
-          for file in source/test/planea/*.html source/test/planea/*.js source/test/planea/*.css; do
-            cp "$file" test/planea/
+          for file in operations.html planea.js planea.css planea-operator-theme.css bridge-client.js contact-enrichment.js candidate-correlation.js provider-notification-consent.js; do
+            test -f "source/test/planea/$file"
+            cp "source/test/planea/$file" "test/planea/$file"
           done
           # Never copy private event configuration or the complete asset library.
           cp source/test/assets/brand/wordmark/semblanzia-wordmark-light.png test/assets/brand/wordmark/
@@ -113,7 +114,7 @@ jobs:
           set -euo pipefail
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add test/planea test/assets test/config.js test-build.json deployment.json
+          git add test/planea/operations.html test/planea/planea.js test/planea/planea.css test/planea/planea-operator-theme.css test/planea/bridge-client.js test/planea/contact-enrichment.js test/planea/candidate-correlation.js test/planea/provider-notification-consent.js test/assets/brand/wordmark/semblanzia-wordmark-light.png test/config.js test-build.json deployment.json
           if git diff --cached --quiet; then
             echo "TEST files already match source"
             exit 0
