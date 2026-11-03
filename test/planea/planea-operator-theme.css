@@ -557,3 +557,14 @@ body[data-mode="operator"] .operator-empty-stage{
   flex-direction:column;
  }
 }
+
+/* Operator next action must remain readable on narrow mobile cards. */
+body[data-mode="operator"] .candidate .summary-copy.candidate-next-step{
+ display:block;
+ -webkit-line-clamp:unset;
+ -webkit-box-orient:initial;
+ overflow:visible;
+ white-space:normal;
+ overflow-wrap:break-word;
+ line-height:1.6;
+}

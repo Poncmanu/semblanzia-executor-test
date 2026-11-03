@@ -1,7 +1,7 @@
 {
   "environment": "TEST",
   "source_repository": "Poncmanu/semblanzia",
-  "source_sha": "0529068e4b1fe72b3849664a93e79b06034c77ca",
+  "source_sha": "a741203d42845dec9ceea4a8d7dc17950f0602b3",
   "source_branch": "test/current",
   "publisher": "Poncmanu/semblanzia-executor-test"
 }
