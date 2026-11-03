@@ -1,7 +1,7 @@
 {
   "source_repository": "Poncmanu/semblanzia",
-  "source_branch": "test/planea-v196-ux-controller",
-  "source_sha": "ed660210a1dfd1ba9e36770564b40c395a690692",
+  "source_branch": "test/current",
+  "source_sha": "e244138371c750dc798fe11febff7a22fe67d349",
   "test_project": "vylrliliaojtcrrhvscv",
   "files": {
     "test/executor-test-config.js": "1c466c1cb51a9240faf911de5c7e878351d22cf72ad88231948e25918b180095",
@@ -18,5 +18,6 @@
     "test/planea/candidate-correlation.js": "8eede152d6d594720547bcd89624f37b671c5fe04dfb95e29cb1db822e53bd8c"
   },
   "control_center_source_sha": "1bbc76b57921eac03adfcad55ff64d35cbd4e9c0",
-  "operations_source_sha": "ed660210a1dfd1ba9e36770564b40c395a690692"
+  "operations_source_sha": "ed660210a1dfd1ba9e36770564b40c395a690692",
+  "deployment_strategy": "isolated_github_pages"
 }
