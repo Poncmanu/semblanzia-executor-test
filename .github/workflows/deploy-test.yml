@@ -70,6 +70,23 @@ jobs:
           done
           # Never copy private event configuration or the complete asset library.
           cp source/test/assets/brand/wordmark/semblanzia-wordmark-light.png test/assets/brand/wordmark/
+          # Generate only the two public client constants; never publish event details.
+          python3 - <<'PYCONFIG'
+          import json, re
+          from pathlib import Path
+          source = Path('source/test/config.js').read_text()
+          values = {}
+          for name in ('SUPABASE_URL', 'SUPABASE_ANON_KEY'):
+              match = re.search(r'^const\\s+' + name + r'\\s*=\\s*([^;]+);', source, re.M)
+              if not match:
+                  raise SystemExit('MISSING_TEST_PUBLIC_CONFIG: ' + name)
+              values[name] = json.loads(match.group(1).strip())
+          if values['SUPABASE_URL'] != 'https://vylrliliaojtcrrhvscv.supabase.co':
+              raise SystemExit('INCORRECT_TEST_PROJECT')
+          if not values['SUPABASE_ANON_KEY'].startswith('sb_publishable_'):
+              raise SystemExit('INVALID_PUBLIC_KEY_TYPE')
+          Path('test/config.js').write_text(''.join('const '+name+' = '+json.dumps(values[name])+';\\n' for name in values))
+          PYCONFIG
           # Keep legacy executor-specific files and offline vendor dependencies intact.
           python3 - <<'PY'
           import json, os
