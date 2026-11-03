@@ -66,11 +66,18 @@ jobs:
           SOURCE_SHA: ${{ inputs.source_sha }}
         run: |
           set -euo pipefail
-          mkdir -p test/planea test/assets/brand/wordmark
+          mkdir -p test/planea test/account test/assets/brand/wordmark test/assets/brand/favicon test/assets/brand/symbol
           for file in operations.html planea.js planea.css planea-operator-theme.css bridge-client.js contact-enrichment.js candidate-correlation.js provider-notification-consent.js; do
             test -f "source/test/planea/$file"
             cp "source/test/planea/$file" "test/planea/$file"
           done
+          # Isolated operator Google login requires the account route.
+          for file in index.html account.js account.css; do
+            test -f "source/test/account/$file"
+            cp "source/test/account/$file" "test/account/$file"
+          done
+          cp source/test/assets/brand/favicon/semblanzia-favicon-dark.png test/assets/brand/favicon/
+          cp source/test/assets/brand/symbol/semblanzia-symbol-master.png test/assets/brand/symbol/
           # Never copy private event configuration or the complete asset library.
           cp source/test/assets/brand/wordmark/semblanzia-wordmark-light.png test/assets/brand/wordmark/
           # Generate only the two public client constants; never publish event details.
@@ -116,7 +123,7 @@ jobs:
           set -euo pipefail
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add test/planea/operations.html test/planea/planea.js test/planea/planea.css test/planea/planea-operator-theme.css test/planea/bridge-client.js test/planea/contact-enrichment.js test/planea/candidate-correlation.js test/planea/provider-notification-consent.js test/assets/brand/wordmark/semblanzia-wordmark-light.png test/config.js test-build.json deployment.json
+          git add test/account/index.html test/account/account.js test/account/account.css test/assets/brand/favicon/semblanzia-favicon-dark.png test/assets/brand/symbol/semblanzia-symbol-master.png test/planea/operations.html test/planea/planea.js test/planea/planea.css test/planea/planea-operator-theme.css test/planea/bridge-client.js test/planea/contact-enrichment.js test/planea/candidate-correlation.js test/planea/provider-notification-consent.js test/assets/brand/wordmark/semblanzia-wordmark-light.png test/config.js test-build.json deployment.json
           if git diff --cached --quiet; then
             echo "TEST files already match source"
             exit 0
