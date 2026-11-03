@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex"><title>PLANEA TEST · One-fixture verifier</title>
+<style>body{font:16px system-ui;background:#f7f3f1;color:#432f42;max-width:620px;margin:40px auto;padding:16px}button{background:#65465f;color:white;border:0;border-radius:9px;padding:16px;font:inherit}button:disabled{opacity:.5}pre{white-space:pre-wrap;overflow-wrap:anywhere;background:white;padding:16px;border-radius:10px}a{color:#65465f}</style></head>
+<body><h1>PLANEA TEST · Single synthetic verification</h1>
+<p>This is a controlled TEST fixture only. It never contacts a supplier or sends email. It requires your existing authenticated operator session and runs one exact, fresh job.</p>
+<p><a href="operations.html">Back to operator dashboard</a></p>
+<button id="run" disabled>Check operator access</button><pre id="status" role="status">Checking TEST operator authorization…</pre>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.57.4/dist/umd/supabase.js"></script>
+<script src="../config.js"></script><script>
+(async()=>{
+'use strict';
+const btn=document.getElementById('run'),out=document.getElementById('status');
+const jobId='e3d72b4c-184f-4711-8820-000000000005';
+const requestId='e3d72b4c-184f-4711-8820-000000000002';
+const client=window.supabase.createClient(SUPABASE_URL,SUPABASE_ANON_KEY);
+const session=await client.auth.getSession();
+if(!session.data?.session?.access_token){out.textContent='No authenticated TEST session found. Sign in through the operator dashboard first.';return;}
+const status=await client.rpc('planea_operator_status');
+if(status.error||!status.data||status.data===false||
+ (typeof status.data==='object'&&status.data.is_operator===false)){
+ out.textContent='Operator authorization could not be established. No job was invoked.';return;
+}
+out.textContent='Authenticated operator check returned successfully. One controlled synthetic job is ready for explicit invocation. No real supplier contact.';
+btn.disabled=false;btn.textContent='Verify ONE synthetic job';
+btn.onclick=async()=>{
+ btn.disabled=true;out.textContent='Invoking one exact TEST job…';
+ try{
+  const {data,error}=await client.functions.invoke('planea-source-verifier-test',{body:{job_id:jobId,request_id:requestId}});
+  if(error){out.textContent='Verifier request rejected. No automatic retry. '+String(error.message||'');return;}
+  out.textContent='TEST verifier response (not proof of terminal DB status): '+JSON.stringify(data,null,2)+'\n\nNo automatic retry. The database result must be checked separately.';
+ }catch(e){out.textContent='Invocation failed; no automatic retry. '+String(e?.message||e);}
+};
+})().catch(e=>{document.getElementById('status').textContent='TEST operator preflight failed. No job invoked.';});
+</script></body></html>
