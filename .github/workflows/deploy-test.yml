@@ -64,12 +64,12 @@ jobs:
           SOURCE_SHA: ${{ inputs.source_sha }}
         run: |
           set -euo pipefail
-          mkdir -p test/planea test/assets
+          mkdir -p test/planea test/assets/brand/wordmark
           for file in source/test/planea/*.html source/test/planea/*.js source/test/planea/*.css; do
             cp "$file" test/planea/
           done
-          cp source/test/config.js test/config.js
-          cp -a source/test/assets/. test/assets/
+          # Never copy private event configuration or the complete asset library.
+          cp source/test/assets/brand/wordmark/semblanzia-wordmark-light.png test/assets/brand/wordmark/
           # Keep legacy executor-specific files and offline vendor dependencies intact.
           python3 - <<'PY'
           import json, os
