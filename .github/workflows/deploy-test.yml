@@ -124,10 +124,21 @@ jobs:
           git commit -m "deploy(TEST): pinned PLANEA source ${{ inputs.source_sha }}"
           git push
 
-      - name: Prepare GitHub Pages artifact from verified TEST files
+      - name: Stage public tracked files only
+        run: |
+          set -euo pipefail
+          mkdir -p pages-public
+          # NEVER upload the private source/ checkout or workflow workspace.
+          git archive HEAD | tar -x -C pages-public
+          test -f pages-public/test/planea/operations.html
+          test -f pages-public/test-build.json
+          test ! -e pages-public/source
+          test ! -e pages-public/.git
+
+      - name: Prepare GitHub Pages artifact from public files
         uses: actions/upload-pages-artifact@v3
         with:
-          path: .
+          path: pages-public
 
   publish-pages:
     name: Publish isolated TEST site to GitHub Pages
