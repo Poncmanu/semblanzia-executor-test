@@ -1,7 +1,7 @@
 {
   "source_repository": "Poncmanu/semblanzia",
   "source_branch": "test/current",
-  "source_sha": "a741203d42845dec9ceea4a8d7dc17950f0602b3",
+  "source_sha": "db73061ab541f0b1eb0fdce69c31845aeba8952d",
   "test_project": "vylrliliaojtcrrhvscv",
   "files": {
     "test/executor-test-config.js": "1c466c1cb51a9240faf911de5c7e878351d22cf72ad88231948e25918b180095",
