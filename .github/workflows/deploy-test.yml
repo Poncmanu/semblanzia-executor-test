@@ -77,7 +77,7 @@ jobs:
           source = Path('source/test/config.js').read_text()
           values = {}
           for name in ('SUPABASE_URL', 'SUPABASE_ANON_KEY'):
-              match = re.search(r'^const\\s+' + name + r'\\s*=\\s*([^;]+);', source, re.M)
+              match = re.search(r'^const\s+' + name + r'\s*=\s*([^;]+);', source, re.M)
               if not match:
                   raise SystemExit('MISSING_TEST_PUBLIC_CONFIG: ' + name)
               values[name] = json.loads(match.group(1).strip())
@@ -85,7 +85,7 @@ jobs:
               raise SystemExit('INCORRECT_TEST_PROJECT')
           if not values['SUPABASE_ANON_KEY'].startswith('sb_publishable_'):
               raise SystemExit('INVALID_PUBLIC_KEY_TYPE')
-          Path('test/config.js').write_text(''.join('const '+name+' = '+json.dumps(values[name])+';\\n' for name in values))
+          Path('test/config.js').write_text(''.join('const '+name+' = '+json.dumps(values[name])+';\n' for name in values))
           PYCONFIG
           # Keep legacy executor-specific files and offline vendor dependencies intact.
           python3 - <<'PY'
