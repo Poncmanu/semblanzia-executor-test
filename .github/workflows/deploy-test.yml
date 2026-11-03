@@ -1,12 +1,12 @@
-name: Deploy TEST from Semblanzia
+name: Deploy isolated PLANEA TEST from Semblanzia
 
 on:
   workflow_dispatch:
     inputs:
-      source_ref:
-        description: "Semblanzia branch or commit to deploy to TEST"
+      source_sha:
+        description: "Full verified 40-character SHA from Poncmanu/semblanzia test/current"
         required: true
-        default: "test/planea-v20-customer-proposals"
+        default: "e244138371c750dc798fe11febff7a22fe67d349"
 
 permissions:
   contents: write
@@ -18,73 +18,81 @@ concurrency:
 jobs:
   deploy:
     runs-on: ubuntu-latest
+    timeout-minutes: 10
     steps:
-      - name: Checkout TEST deployment repository
+      - name: Checkout isolated TEST publishing repository
         uses: actions/checkout@v4
 
-      - name: Checkout Semblanzia TEST source
+      - name: Validate pinned TEST source SHA
+        env:
+          SOURCE_SHA: ${{ inputs.source_sha }}
+        run: |
+          [[ "$SOURCE_SHA" =~ ^[a-f0-9]{40}$ ]] || { echo "INVALID_SOURCE_SHA"; exit 1; }
+
+      - name: Checkout Semblanzia source (read-only)
         uses: actions/checkout@v4
         with:
           repository: Poncmanu/semblanzia
-          ref: ${{ inputs.source_ref }}
+          ref: ${{ inputs.source_sha }}
           path: source
           persist-credentials: false
+          # Cross-repository private checkout may require a separate read-only token.
+          # Do not add credentials or weaken access controls automatically.
 
-      - name: Copy approved source files from Semblanzia
+      - name: Verify exact source and TEST safety
+        env:
+          SOURCE_SHA: ${{ inputs.source_sha }}
         run: |
           set -euo pipefail
-          files=(
-            test/planea/operations.html
-            test/planea/planea.js
-            test/planea/planea.css
-            test/planea/bridge-client.js
-            test/planea/contact-enrichment.js
-            test/planea/candidate-correlation.js
-          )
-          for file in "${files[@]}"; do
-            cp "source/$file" "$file"
-          done
-          grep -q "https://vylrliliaojtcrrhvscv.supabase.co" test/planea/planea.js
-          if grep -R "uiqgqjynrxerqszmyxyj" test/planea test/executor-test-config.js; then
-            echo "PROD Supabase reference detected in TEST deployment"
-            exit 1
+          test "$(git -C source rev-parse HEAD)" = "$SOURCE_SHA"
+          test "$(git -C source merge-base --is-ancestor "$SOURCE_SHA" origin/test/current; echo $?)" = 0 || { echo "SOURCE_NOT_ON_TEST_CURRENT"; exit 1; }
+          grep -q 'https://vylrliliaojtcrrhvscv.supabase.co' source/test/planea/planea.js
+          grep -q 'planea_operator_research_status_test' source/test/planea/planea.js
+          if grep -R -l 'uiqgqjynrxerqszmyxyj' source/test/planea/*.js source/test/config.js; then
+            echo "PROD_SUPABASE_REFERENCE"; exit 1
           fi
 
-      - name: Keep TEST deployment marker visible
-        run: |
-          python - <<'PY'
-          from pathlib import Path
-          p=Path("test/planea/operations.html")
-          s=p.read_text()
-          s=s.replace("TEST · MILESTONE 2A · V19.6","TEST · V20")
-          s=s.replace("planea.js?v=19.6","planea.js?v=20")
-          p.write_text(s)
-          PY
-
-      - name: Record source revision
+      - name: Publish whitelisted static TEST assets without overwriting executor tools
         env:
-          SOURCE_REF: ${{ inputs.source_ref }}
+          SOURCE_SHA: ${{ inputs.source_sha }}
         run: |
-          python - <<'PY'
+          set -euo pipefail
+          mkdir -p test/planea test/assets
+          for file in source/test/planea/*.html source/test/planea/*.js source/test/planea/*.css; do
+            cp "$file" test/planea/
+          done
+          cp source/test/config.js test/config.js
+          cp -a source/test/assets/. test/assets/
+          # Keep legacy executor-specific files and offline vendor dependencies intact.
+          python3 - <<'PY'
           import json, os
           from pathlib import Path
+          sha=os.environ["SOURCE_SHA"]
+          manifest={"environment":"TEST","source_repository":"Poncmanu/semblanzia","source_sha":sha,
+                    "source_branch":"test/current","publisher":"Poncmanu/semblanzia-executor-test"}
+          Path("test-build.json").write_text(json.dumps(manifest,indent=2)+"\n")
           p=Path("deployment.json")
-          d=json.loads(p.read_text())
-          d["source_repository"]="Poncmanu/semblanzia"
-          d["source_branch"]=os.environ["SOURCE_REF"]
-          d["deployment_strategy"]="github_actions_direct_test"
-          p.write_text(json.dumps(d,indent=2)+"\n")
+          old=json.loads(p.read_text()) if p.exists() else {}
+          old.update({"source_repository":"Poncmanu/semblanzia","source_branch":"test/current",
+                      "source_sha":sha,"deployment_strategy":"isolated_github_pages"})
+          p.write_text(json.dumps(old,indent=2)+"\n")
           PY
+          grep -q 'planea_operator_research_status_test' test/planea/planea.js
+          grep -q 'r=20261102-pr101-research-status' test/planea/operations.html
+          test -f test/planea/executor-controller-test.html
+          if grep -R -l 'uiqgqjynrxerqszmyxyj' test/planea/*.js test/config.js; then
+            echo "PROD_SUPABASE_REFERENCE"; exit 1
+          fi
 
-      - name: Commit TEST deployment
+      - name: Commit isolated TEST deployment only
         run: |
-          set -e
+          set -euo pipefail
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add test/planea deployment.json
+          git add test/planea test/assets test/config.js test-build.json deployment.json
           if git diff --cached --quiet; then
-            echo "TEST already matches requested source."
+            echo "TEST files already match source"
             exit 0
           fi
-          git commit -m "deploy: PLANEA TEST from ${{ inputs.source_ref }}"
+          git commit -m "deploy(TEST): pinned PLANEA source ${{ inputs.source_sha }}"
           git push
