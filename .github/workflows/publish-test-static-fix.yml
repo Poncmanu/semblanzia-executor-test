@@ -1,0 +1,65 @@
+name: Publish isolated PLANEA TEST static fix
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - '.github/workflows/publish-test-static-fix.yml'
+      - 'test/planea/planea.js'
+      - 'test/planea/operations.html'
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: planea-test-deploy
+  cancel-in-progress: false
+
+jobs:
+  prepare:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - name: Verify TEST-only static compatibility
+        shell: bash
+        run: |
+          set -euo pipefail
+          test -f test/planea/operations.html
+          test -f test/planea/planea.js
+          test -f test/config.js
+          grep -Fq 'https://vylrliliaojtcrrhvscv.supabase.co' test/config.js
+          grep -Fq '20261103-exact-verifier-v6' test/planea/operations.html
+          grep -Fq 'verifyExactSupplierSource' test/planea/planea.js
+          if grep -Fq 'verifyQueuedSupplierSources' test/planea/planea.js; then
+            echo 'OBSOLETE_SHARED_QUEUE_INVOCATION'; exit 1
+          fi
+          if grep -R -l -F 'uiqgqjynrxerqszmyxyj' test/planea/*.js test/config.js; then
+            echo 'PROD_SUPABASE_REFERENCE'; exit 1
+          fi
+      - name: Stage tracked static files (no repository credentials)
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p pages-public
+          git archive HEAD | tar -x -C pages-public
+          test -f pages-public/test/planea/operations.html
+          test -f pages-public/test/planea/planea.js
+          test ! -e pages-public/source
+          test ! -e pages-public/.git
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: pages-public
+  publish:
+    needs: prepare
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4
