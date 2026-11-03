@@ -29,6 +29,12 @@ jobs:
         run: |
           [[ "$SOURCE_SHA" =~ ^[a-f0-9]{40}$ ]] || { echo "INVALID_SOURCE_SHA"; exit 1; }
 
+      - name: Require explicitly scoped private source credential
+        env:
+          SOURCE_TOKEN: ${{ secrets.SEMBLANZIA_SOURCE_READ_TOKEN }}
+        run: |
+          test -n "$SOURCE_TOKEN" || { echo 'TEST_SOURCE_READ_TOKEN_MISSING'; exit 1; }
+
       - name: Checkout Semblanzia source (read-only)
         uses: actions/checkout@v4
         with:
@@ -36,8 +42,8 @@ jobs:
           ref: ${{ inputs.source_sha }}
           path: source
           persist-credentials: false
-          # Cross-repository private checkout may require a separate read-only token.
-          # Do not add credentials or weaken access controls automatically.
+          token: ${{ secrets.SEMBLANZIA_SOURCE_READ_TOKEN }}
+          # This must be a fine-grained read-only token scoped only to Poncmanu/semblanzia.
 
       - name: Verify exact source and TEST safety
         env:
@@ -45,7 +51,8 @@ jobs:
         run: |
           set -euo pipefail
           test "$(git -C source rev-parse HEAD)" = "$SOURCE_SHA"
-          # Checkout is SHA-pinned. Branch membership must be verified separately before dispatch.\n          # Never silently fall back to main or an arbitrary branch.
+          # Checkout is SHA-pinned. Branch membership must be verified separately before dispatch.
+          # Never silently fall back to main or an arbitrary branch.
           grep -q 'https://vylrliliaojtcrrhvscv.supabase.co' source/test/planea/planea.js
           grep -q 'planea_operator_research_status_test' source/test/planea/planea.js
           if grep -R -l 'uiqgqjynrxerqszmyxyj' source/test/planea/*.js source/test/config.js; then
