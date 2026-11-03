@@ -41,7 +41,7 @@ jobs:
           repository: Poncmanu/semblanzia
           ref: ${{ inputs.source_sha }}
           path: source
-          persist-credentials: false
+          persist-credentials: true
           token: ${{ secrets.SEMBLANZIA_SOURCE_READ_TOKEN }}
           # This must be a fine-grained read-only token scoped only to Poncmanu/semblanzia.
 
