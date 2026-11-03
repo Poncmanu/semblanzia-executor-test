@@ -8,6 +8,7 @@ on:
       - '.github/workflows/publish-test-static-fix.yml'
       - 'test/planea/planea.js'
       - 'test/planea/operations.html'
+      - 'test/planea/verification-fixture.html'
 
 permissions:
   contents: read
@@ -29,6 +30,7 @@ jobs:
         run: |
           set -euo pipefail
           test -f test/planea/operations.html
+          test -f test/planea/verification-fixture.html
           test -f test/planea/planea.js
           test -f test/config.js
           grep -Fq 'https://vylrliliaojtcrrhvscv.supabase.co' test/config.js
@@ -47,6 +49,7 @@ jobs:
           mkdir -p pages-public
           git archive HEAD | tar -x -C pages-public
           test -f pages-public/test/planea/operations.html
+          test -f pages-public/test/planea/verification-fixture.html
           test -f pages-public/test/planea/planea.js
           test ! -e pages-public/source
           test ! -e pages-public/.git
