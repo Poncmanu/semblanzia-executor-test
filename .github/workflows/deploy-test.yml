@@ -10,6 +10,8 @@ on:
 
 permissions:
   contents: write
+  pages: write
+  id-token: write
 
 concurrency:
   group: planea-test-deploy
@@ -121,3 +123,32 @@ jobs:
           fi
           git commit -m "deploy(TEST): pinned PLANEA source ${{ inputs.source_sha }}"
           git push
+
+      - name: Stage public tracked files only
+        run: |
+          set -euo pipefail
+          mkdir -p pages-public
+          # NEVER upload the private source/ checkout or workflow workspace.
+          git archive HEAD | tar -x -C pages-public
+          test -f pages-public/test/planea/operations.html
+          test -f pages-public/test-build.json
+          test ! -e pages-public/source
+          test ! -e pages-public/.git
+
+      - name: Prepare GitHub Pages artifact from public files
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: pages-public
+
+  publish-pages:
+    name: Publish isolated TEST site to GitHub Pages
+    needs: deploy
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy verified static TEST artifact
+        id: deployment
+        uses: actions/deploy-pages@v4
