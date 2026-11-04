@@ -1,0 +1,464 @@
+/*
+ * PLANEA customer experience · Semblanzia correspondence visual identity.
+ * TEST only. Loaded by index.html, not operations.html.
+ * Presentation-only: no structural changes to request/offer/consent controls.
+ * Design tokens match approved confirmation + proposals email previews.
+ */
+body:not([data-mode="operator"]){
+  --plum:#624259;
+  --plum-deep:#4c3247;
+  --plum-soft:#f5eef2;
+  --cream:#f8f5f0;
+  --paper:#ffffff;
+  --ink:#50384c;
+  --muted:#655963;
+  --line:#e8ded5;
+  --gold:#a47e51;
+  background:var(--cream);
+  color:var(--ink);
+  font-family:Montserrat,Arial,Helvetica,sans-serif;
+  font-size:16px;
+  line-height:1.65;
+  -webkit-text-size-adjust:100%;
+}
+
+/* The customer's wordmark now sits on the same rich plum as the emails. */
+body:not([data-mode="operator"]) > header{
+  position:relative;
+  background:var(--plum-deep);
+  color:#ffffff;
+  border-bottom:3px solid #b99a70;
+  padding:24px max(4vw,18px);
+  gap:16px;
+  box-shadow:0 9px 25px rgba(50,26,46,.13);
+}
+body:not([data-mode="operator"]) > header .brand{
+  color:#fff;
+  text-decoration:none;
+  max-width:100%;
+}
+body:not([data-mode="operator"]) > header .brand-logo{
+  display:block;
+  width:216px;
+  max-width:100%;
+  height:auto;
+}
+body:not([data-mode="operator"]) > header .brand span{
+  font-family:Montserrat,Arial,sans-serif;
+  font-size:11px;
+  letter-spacing:.25em;
+  line-height:1.6;
+  color:#e5cba3;
+  margin-top:8px;
+}
+body:not([data-mode="operator"]) > header .test-tag{
+  border:1px solid rgba(229,203,163,.46);
+  background:rgba(255,255,255,.08);
+  color:#f4e4cf;
+  font-size:10px;
+  font-weight:600;
+  padding:6px 13px;
+  letter-spacing:.045em;
+}
+body:not([data-mode="operator"]) > header .customer-signin,
+body:not([data-mode="operator"]) > header #signout{
+  border-color:#e5cba3;
+  color:#fff4e4;
+  background:transparent;
+  min-height:46px;
+  font-weight:600;
+}
+body:not([data-mode="operator"]) > header .customer-signin:hover:not(:disabled),
+body:not([data-mode="operator"]) > header #signout:hover:not(:disabled){
+  color:var(--plum-deep);
+  background:#f3e4d1;
+  border-color:#f3e4d1;
+}
+
+body:not([data-mode="operator"]) > main{
+  max-width:1040px;
+  padding:30px 22px 74px;
+}
+body:not([data-mode="operator"]) .intro{
+  max-width:100%;
+  margin:0 0 28px;
+  padding:39px 43px 41px;
+  border:1px solid var(--line);
+  border-top:4px solid #b99a70;
+  border-radius:20px;
+  background:#fff;
+  box-shadow:0 10px 28px rgba(66,43,58,.06);
+}
+body:not([data-mode="operator"]) .intro .eyebrow,
+body:not([data-mode="operator"]) #customer .eyebrow,
+body:not([data-mode="operator"]) #auth .eyebrow{
+  color:var(--gold);
+  font-family:Montserrat,Arial,Helvetica,sans-serif;
+  font-size:11px;
+  font-weight:700;
+  letter-spacing:.17em;
+  line-height:1.6;
+}
+body:not([data-mode="operator"]) > main h1,
+body:not([data-mode="operator"]) > main h2,
+body:not([data-mode="operator"]) > main h3{
+  font-family:Georgia,'Times New Roman',serif;
+  font-weight:400;
+  color:var(--ink);
+  letter-spacing:-.025em;
+}
+body:not([data-mode="operator"]) .intro h1{
+  font-size:clamp(34px,5.2vw,52px);
+  line-height:1.14;
+  margin:14px 0 18px;
+}
+body:not([data-mode="operator"]) .intro>p:last-child{
+  max-width:680px;
+  margin:0;
+  font-size:16px;
+  line-height:1.75;
+  color:var(--muted);
+}
+body:not([data-mode="operator"]) > main h2{
+  font-size:clamp(27px,3vw,34px);
+  margin:0 0 14px;
+}
+body:not([data-mode="operator"]) > main h3{font-size:25px}
+body:not([data-mode="operator"]) > main p,
+body:not([data-mode="operator"]) > main small{color:var(--muted)}
+
+/* Paper panels + refined form fields align with the email's white body. */
+body:not([data-mode="operator"]) .card{
+  background:var(--paper);
+  border:1px solid var(--line);
+  border-radius:20px;
+  padding:30px 32px;
+  margin:20px 0;
+  box-shadow:0 10px 28px rgba(66,43,58,.055);
+}
+body:not([data-mode="operator"]) #auth.card{
+  border-top:3px solid #b99a70;
+}
+body:not([data-mode="operator"]) > main label{
+  color:#503e4d;
+  font-size:14px;
+  font-weight:600;
+  line-height:1.6;
+}
+body:not([data-mode="operator"]) > main input,
+body:not([data-mode="operator"]) > main select,
+body:not([data-mode="operator"]) > main textarea{
+  background:#fffefa;
+  border:1px solid #d7c9cf;
+  border-radius:10px;
+  padding:13px 15px;
+  color:#463846;
+  font-size:16px;
+  box-shadow:none;
+}
+body:not([data-mode="operator"]) > main input:hover,
+body:not([data-mode="operator"]) > main select:hover,
+body:not([data-mode="operator"]) > main textarea:hover{border-color:#ab8c9f}
+body:not([data-mode="operator"]) > main input:focus,
+body:not([data-mode="operator"]) > main select:focus,
+body:not([data-mode="operator"]) > main textarea:focus{
+  border-color:var(--plum);
+  outline:2px solid rgba(185,154,112,.62);
+  outline-offset:2px;
+  background:#fff;
+}
+body:not([data-mode="operator"]) > main input[type="checkbox"]{
+  padding:0;
+  box-shadow:none;
+  accent-color:var(--plum);
+}
+body:not([data-mode="operator"]) > main :focus-visible{
+  outline:3px solid #b99a70;
+  outline-offset:3px;
+}
+body:not([data-mode="operator"]) > main summary:focus-visible{
+  outline-offset:-3px;
+}
+
+/* Email CTA style, with accessible contrast and generous tap targets. */
+body:not([data-mode="operator"]) > main button,
+body:not([data-mode="operator"]) > main .button{
+  background:var(--plum);
+  border:1px solid var(--plum);
+  border-radius:9px;
+  color:#fff;
+  min-height:50px;
+  padding:13px 20px;
+  font-family:Montserrat,Arial,Helvetica,sans-serif;
+  font-size:14px;
+  font-weight:700;
+  line-height:1.45;
+  text-decoration:none;
+  text-align:center;
+  box-shadow:none;
+  transition:background .15s ease,border-color .15s ease;
+}
+body:not([data-mode="operator"]) > main button:hover:not(:disabled),
+body:not([data-mode="operator"]) > main .button:hover{
+  background:var(--plum-deep);
+  border-color:var(--plum-deep);
+  color:#fff;
+}
+body:not([data-mode="operator"]) > main button.secondary,
+body:not([data-mode="operator"]) > main .button.secondary{
+  background:#fff;
+  color:var(--plum);
+  border:1px solid #bfa8b6;
+}
+body:not([data-mode="operator"]) > main button.secondary:hover:not(:disabled),
+body:not([data-mode="operator"]) > main .button.secondary:hover{
+  background:var(--plum-soft);
+  color:var(--plum-deep);
+  border-color:var(--plum);
+}
+body:not([data-mode="operator"]) > main button:disabled{
+  opacity:.48;
+  cursor:default;
+}
+body:not([data-mode="operator"]) .section-head{
+  gap:12px 16px;
+  margin-bottom:16px;
+}
+body:not([data-mode="operator"]) #saved-requests{
+  margin:4px 0 31px;
+}
+body:not([data-mode="operator"]) #saved-requests h2{
+  margin:0;
+}
+
+/* Accordion cards remain separate, accessible, and full-width on mobile. */
+body:not([data-mode="operator"]) #requests{gap:14px}
+body:not([data-mode="operator"]) .customer-request-card{
+  padding:0;
+  background:#fff;
+  border:1px solid var(--line);
+  border-radius:16px;
+  box-shadow:0 8px 24px rgba(66,43,58,.045);
+}
+body:not([data-mode="operator"]) .customer-request-toggle{
+  background:transparent;
+  color:var(--ink);
+  min-height:76px;
+  padding:19px 22px;
+  border:0;
+  border-radius:0;
+  box-shadow:none;
+  text-align:left;
+  font-weight:400;
+}
+body:not([data-mode="operator"]) .customer-request-toggle:hover:not(:disabled){
+  color:var(--ink);
+  background:#fbf8f4;
+  border:0;
+}
+body:not([data-mode="operator"]) .customer-request-description strong{
+  font-family:Georgia,'Times New Roman',serif;
+  font-weight:400;
+  font-size:21px;
+  color:var(--ink);
+  line-height:1.28;
+}
+body:not([data-mode="operator"]) .customer-request-meta{
+  color:var(--muted);
+  font-size:12px;
+}
+body:not([data-mode="operator"]) .status{
+  color:var(--plum);
+  background:#f6eef2;
+  border:1px solid #eadbe4;
+  font-size:11px;
+  font-weight:700;
+}
+body:not([data-mode="operator"]) .customer-request-action,
+body:not([data-mode="operator"]) .customer-request-chevron{
+  color:var(--plum);
+}
+body:not([data-mode="operator"]) .request-open>.customer-request-toggle{
+  background:#fbf8f4;
+  border-bottom:1px solid var(--line);
+}
+body:not([data-mode="operator"]) .customer-request-panel{background:#fff}
+body:not([data-mode="operator"]) .customer-request-panel #detail>.card{
+  margin:0;
+  padding:19px 0 0;
+  border:0;
+  border-radius:0;
+  background:transparent;
+  box-shadow:none;
+}
+body:not([data-mode="operator"]) .offers{
+  gap:15px;
+}
+body:not([data-mode="operator"]) .offer.disclosure{
+  background:#fff;
+  border:1px solid #dfd2d5;
+  border-radius:13px;
+}
+body:not([data-mode="operator"]) .offer.disclosure[open]{
+  box-shadow:0 5px 16px rgba(66,43,58,.06);
+}
+body:not([data-mode="operator"]) .offer.is-selected{
+  border:2px solid var(--plum);
+  background:#fff;
+}
+body:not([data-mode="operator"]) .offer.is-selected>summary{
+  background:#f7eef3;
+}
+body:not([data-mode="operator"]) .disclosure-heading{
+  font-family:Georgia,'Times New Roman',serif;
+  font-weight:400;
+  font-size:21px;
+  color:var(--ink);
+}
+body:not([data-mode="operator"]) .disclosure-hint,
+body:not([data-mode="operator"]) .selection-mark{color:var(--plum)}
+body:not([data-mode="operator"]) .disclosure>summary{
+  padding:19px;
+}
+body:not([data-mode="operator"]) .disclosure-body{
+  padding:19px;
+}
+body:not([data-mode="operator"]) .price{
+  font-family:Georgia,'Times New Roman',serif;
+  font-size:29px;
+  font-weight:400;
+  color:var(--plum);
+}
+body:not([data-mode="operator"]) #consent{
+  background:#fbf8f4;
+  border:1px solid #e5d9d4;
+  border-left:3px solid #b99a70;
+  border-radius:13px;
+  padding:20px;
+}
+body:not([data-mode="operator"]) .check{
+  color:var(--ink);
+}
+body:not([data-mode="operator"]) .action-feedback{
+  background:#f6eef2;
+  border-color:#dfcbd6;
+  color:#50384c;
+}
+body:not([data-mode="operator"]) .action-feedback.error{
+  background:#fff0ec;
+  border-color:#b96554;
+  color:#823f31;
+}
+body:not([data-mode="operator"]) .action-feedback .feedback-dismiss{
+  background:transparent;
+  color:inherit;
+  border:1px solid transparent;
+  padding:4px;
+  border-radius:9px;
+  box-shadow:none;
+}
+body:not([data-mode="operator"]) .action-feedback .feedback-dismiss:hover{
+  background:#eadfe5;
+  color:var(--plum-deep);
+}
+body:not([data-mode="operator"]) #message{
+  background:#f5ece3;
+  border:1px solid #e5d7c5;
+  border-radius:11px;
+}
+body:not([data-mode="operator"]) > footer{
+  background:#fbf8f4;
+  color:#837383;
+  border-top:1px solid var(--line);
+  padding:28px 16px;
+}
+@media(max-width:650px){
+  body:not([data-mode="operator"]) > header{
+    padding:19px 15px 14px;
+    gap:9px 12px;
+  }
+  body:not([data-mode="operator"]) > header .brand{
+    max-width:calc(100% - 144px);
+  }
+  body:not([data-mode="operator"]) > header .brand-logo{
+    width:172px;
+    max-width:100%;
+  }
+  body:not([data-mode="operator"]) > header .brand span{
+    font-size:9px;
+    letter-spacing:.2em;
+    margin-top:4px;
+  }
+  body:not([data-mode="operator"]) > header .customer-signin,
+  body:not([data-mode="operator"]) > header #signout{
+    font-size:12px;
+    padding:11px 12px;
+    min-height:44px;
+  }
+  body:not([data-mode="operator"]) > header .test-tag{
+    order:3;
+    flex-basis:100%;
+    text-align:center;
+    font-size:10px;
+    padding:4px 10px;
+    margin-top:4px;
+  }
+  body:not([data-mode="operator"]) > main{
+    padding:20px 12px 50px;
+  }
+  body:not([data-mode="operator"]) .intro{
+    padding:30px 22px;
+    border-radius:17px;
+    margin-bottom:22px;
+  }
+  body:not([data-mode="operator"]) .intro h1{font-size:clamp(32px,9vw,41px)}
+  body:not([data-mode="operator"]) .intro>p:last-child{font-size:15px;line-height:1.7}
+  body:not([data-mode="operator"]) .card{
+    padding:23px 20px;
+    border-radius:17px;
+    margin:15px 0;
+  }
+  body:not([data-mode="operator"]) .grid,
+  body:not([data-mode="operator"]) .offers{grid-template-columns:1fr}
+  body:not([data-mode="operator"]) #submit-intake{width:100%}
+  body:not([data-mode="operator"]) .customer-request-toggle{
+    padding:17px;
+    min-height:70px;
+  }
+  body:not([data-mode="operator"]) .customer-request-description strong{font-size:20px}
+  body:not([data-mode="operator"]) .customer-request-panel{
+    padding:0 13px 16px;
+  }
+  body:not([data-mode="operator"]) .disclosure>summary,
+  body:not([data-mode="operator"]) .disclosure-body{padding:16px}
+  body:not([data-mode="operator"]) #consent{padding:16px}
+  body:not([data-mode="operator"]) .actions{align-items:stretch}
+}
+@media(max-width:370px){
+  body:not([data-mode="operator"]) > header .brand{
+    max-width:calc(100% - 125px);
+  }
+  body:not([data-mode="operator"]) > header .brand-logo{width:150px}
+  body:not([data-mode="operator"]) > header .customer-signin,
+  body:not([data-mode="operator"]) > header #signout{
+    font-size:11px;
+    padding:9px 10px;
+  }
+  body:not([data-mode="operator"]) .intro{padding:25px 19px}
+  body:not([data-mode="operator"]) .card{padding:20px 17px}
+}
+@media(prefers-reduced-motion:reduce){
+  body:not([data-mode="operator"]) > main button,
+  body:not([data-mode="operator"]) > main .button{transition:none}
+}
+
+/* Customer auth affordances; approved theme tokens remain unchanged. */
+body:not([data-mode="operator"]) #google{display:inline-flex;align-items:center;justify-content:center;gap:10px}
+.google-g{width:20px;height:20px;flex:0 0 20px}
+.password-control{display:block;position:relative;min-width:0}
+body:not([data-mode="operator"]) .password-control input{width:100%;box-sizing:border-box;padding-right:56px}
+body:not([data-mode="operator"]) #password-reveal{position:absolute;right:2px;top:50%;transform:translateY(-50%);width:44px;min-height:44px;padding:10px;border:0;background:transparent;color:var(--plum);box-shadow:none}
+#password-reveal svg{display:block;width:24px;height:24px}.eye-slash{display:none}#password-reveal[aria-pressed="true"] .eye-slash{display:block}
+#password-reveal:focus-visible{outline:2px solid currentColor;outline-offset:-3px}
+
+.request-progress{border-block:1px solid var(--line);padding:12px 0;margin:16px 0}.request-progress ol{list-style:none;padding:0;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}.request-progress li{font-size:12px;line-height:1.5;color:var(--muted)}.request-progress li>span{display:flex;align-items:center;justify-content:center;width:28px;height:28px;border:1px solid currentColor;border-radius:50%;margin-bottom:7px}.request-progress .is-current{color:var(--plum);font-weight:700}.request-progress .is-complete>span{background:var(--plum);color:white}.request-progress .is-pending{opacity:.75}@media(max-width:390px){.request-progress ol{grid-template-columns:repeat(2,minmax(0,1fr))}}

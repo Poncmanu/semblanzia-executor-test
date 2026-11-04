@@ -1,0 +1,21 @@
+/* PLANEA invitation bridge: isolated from quote/consent layout and PROD. */
+.planea-invitation-promo[hidden]{display:none!important}
+.planea-invitation-promo{position:fixed;inset:0;z-index:2000;display:flex;align-items:center;justify-content:center;padding:16px;background:rgba(35,23,36,.72);overflow-y:auto}
+body.planea-invitation-promo-open{overflow:hidden}
+.planea-invitation-promo-dialog{position:relative;width:min(100%,800px);max-height:min(92dvh,820px);overflow-y:auto;background:#fffaf5;border:1px solid #dbc9bc;border-radius:22px;box-shadow:0 24px 65px rgba(17,13,19,.34);outline-offset:3px}
+.planea-invitation-promo-content{display:grid;grid-template-columns:minmax(0,1fr) minmax(210px,.8fr);align-items:center;gap:22px;padding:28px}
+.planea-invitation-promo-copy{min-width:0}
+.planea-invitation-promo-eyebrow{font-size:11px;letter-spacing:.16em;font-weight:700;color:#9b7542;margin-bottom:12px}
+.planea-invitation-promo-copy h2{margin:0 0 14px;font-size:clamp(29px,4vw,39px);color:#56364f}
+.planea-invitation-promo-copy p{line-height:1.55}
+.planea-invitation-promo-note{font-size:14px}
+.planea-invitation-promo-actions{display:flex;flex-direction:column;align-items:stretch;gap:10px;margin-top:24px}
+.planea-invitation-promo-actions a,.planea-invitation-promo-actions button{min-height:48px;text-align:center;white-space:normal}
+.planea-invitation-promo-x{position:absolute;right:10px;top:8px;z-index:2;background:transparent;border:0;color:#624259;font-size:28px;padding:4px 12px;line-height:1}
+.planea-invitation-promo-visual{display:flex;flex-direction:column;align-items:center;gap:10px;min-width:0}
+.planea-invitation-promo-phone{position:relative;width:232px;height:481px;padding:12px 5px 0;border:7px solid #32202e;border-radius:29px;background:#fff;box-shadow:0 14px 30px #261d2c38;overflow:hidden}
+.planea-invitation-promo-speaker{position:absolute;z-index:1;left:calc(50% - 27px);top:5px;width:54px;height:5px;border-radius:10px;background:#32202e}
+.planea-invitation-promo-phone iframe{width:390px;height:800px;border:0;max-width:none!important;display:block;transform:scale(.556);transform-origin:top left;pointer-events:none}
+.planea-invitation-promo-caption{font-size:11px;text-align:center;line-height:1.4;margin:0;max-width:230px}
+@media(max-width:650px){.planea-invitation-promo{padding:10px;align-items:flex-start}.planea-invitation-promo-dialog{max-height:calc(100dvh - 20px);border-radius:16px}.planea-invitation-promo-content{grid-template-columns:1fr;gap:12px;padding:24px 17px 16px}.planea-invitation-promo-copy h2{font-size:28px}.planea-invitation-promo-copy p{margin:8px 0}.planea-invitation-promo-actions{margin-top:16px}.planea-invitation-promo-visual{padding-top:4px}.planea-invitation-promo-phone{width:174px;height:345px;border-width:6px;border-radius:22px;padding:9px 4px 0}.planea-invitation-promo-phone iframe{transform:scale(.416)}.planea-invitation-promo-speaker{top:3px}.planea-invitation-promo-caption{max-width:280px}}
+@media(prefers-reduced-motion:reduce){.planea-invitation-promo *{scroll-behavior:auto!important}}
